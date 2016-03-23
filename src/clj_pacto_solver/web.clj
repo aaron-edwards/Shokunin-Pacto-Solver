@@ -7,7 +7,6 @@
 (defroutes app
   (ANY "*" [] "Much lost such wow"))
 
-(defn -main [& [port]]
-  (println port)
+(defn -main [& args]
   (let [port (Integer. (or (System/getenv "PORT") 5000))]
     (jetty/run-jetty (site #'app) {:port port :join? false})))
