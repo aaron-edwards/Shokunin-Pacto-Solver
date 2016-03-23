@@ -3,7 +3,6 @@
             [clojure.data.json :as json]))
 
 (defn- get-url-as-json [url]
-  (println url)
   (-> url
       http/get
       deref
