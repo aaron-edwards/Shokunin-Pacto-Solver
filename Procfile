@@ -1,1 +1,1 @@
-web: java $JVM_OPTS -cp target/clj-pacto-solver.jar clojure.main -m clj-pacto-solver.web $PACT_LOCATION
+web: java $JVM_OPTS -cp target/clj-pacto-solver.jar clojure.main -m clj-pacto-solver.web $PACTO_LOCATION
