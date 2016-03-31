@@ -23,7 +23,15 @@
     (is (= "something/:id1/another/:id2" (parser/get-path contract)))))
 
 (deftest get-response-headers-should-extract-response-headers
-  (let [contract {:response {:headers [{:Content-Type "application/json"}]}}
+  (let [contract {:response {:headers {:Content-Type "application/json"}}}
         headers (parser/get-response-headers contract)]
-    (is (= 1 (count headers)))
-    (is (= {:Content-Type "application/json"} (first headers)))))
+    (is (= {"Content-Type" "application/json"} headers))))
+
+(deftest get-response-status-should-return-200
+  (let [contract {:response {:status 200}}]
+    (is (= 200 (parser/get-response-status contract)))))
+
+(deftest get-response-status-should-return-201
+  (let [contract {:response {:status 201}}]
+    (is (= 201 (parser/get-response-status contract)))))
+
