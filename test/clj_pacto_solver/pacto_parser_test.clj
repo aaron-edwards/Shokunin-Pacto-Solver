@@ -38,10 +38,40 @@
 
 (deftest create-json-property-should-return-a-string
   (let [property {:type "string"}]
-    (is (string? (parser/create-json-property property nil)))))
+    (is (string? (parser/create-json-property property)))))
 
 (deftest create-josn-property-should-return-valid-string
   (let [property {:type "string"
                   :pattern "^(READY|MAKING|QUEUED|DELAYED)$"}]
    (is (re-matches (re-pattern (:pattern property))
-                  (parser/create-json-property property nil)))))
+                  (parser/create-json-property property)))))
+
+(deftest create-json-property-should-return-int
+  (let [property {:type "int"}]
+    (is (integer? (parser/create-json-property property)))))
+
+(deftest create-json-property-should-return-integer
+  (let [property {:type "integer"}]
+    (is (integer? (parser/create-json-property property)))))
+
+(deftest create-json-property-should-return-number
+  (let [property {:type "number"}]
+    (is (number? (parser/create-json-property property)))))
+
+(deftest create-json-should-return-an-array
+  (let [property {:type "array"
+                  :minItems 2
+                  :maxItems 5
+                  :items {:type "int"}}
+        result (parser/create-json-property property)]
+    (is (seq? result))
+    (is (>= (count result) (:minItems property)))
+    (is (<= (count result) (:maxItems property)))
+    (is (every? integer? result))))
+
+(deftest create-json-should-return-object
+  (let [property {:type "object"
+                  :properties {:key {:type "string"}}}
+        result (parser/create-json-property property)]
+    (is (map? result))
+    (is (string? (:key result)))))

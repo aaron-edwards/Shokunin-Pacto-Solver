@@ -28,10 +28,10 @@
 
 
 (defmulti create-json-property
-  (fn [property req]
+  (fn [property]
     (keyword (:type property))))
 
-(defmethod create-json-property :string [property req]
+(defmethod create-json-property :string [property]
   (if (:pattern property)
     (rand-nth
       (s/split
@@ -40,22 +40,22 @@
         #"\|"))
     (gen/word)))
 
-(defmethod create-json-property :object [property req]
-  (modify-vals #(create-json-property % req) (:properties property)))
+(defmethod create-json-property :object [property]
+  (modify-vals create-json-property (:properties property)))
 
-(defmethod create-json-property :array [property req]
+(defmethod create-json-property :array [property]
   (let [minItems (or (:minItems property) 0)]
     (let [maxItems (or (:maxItems property) (+ 1 (* 2 minItems)))]
       (repeatedly (+ minItems (rand-int (- maxItems minItems)))
-                  #(create-json-property (:items property) req)))))
+                  #(create-json-property (:items property))))))
 
-(defmethod create-json-property :number [property req]
+(defmethod create-json-property :number [property]
   (rand 10))
 
-(defmethod create-json-property :integer [property req]
+(defmethod create-json-property :integer [property]
   (rand-int 10))
 
-(defmethod create-json-property :int [property req]
+(defmethod create-json-property :int [property]
   (rand-int 10))
 
 (defn create-handler [contract]
@@ -63,5 +63,4 @@
     {:status (get-response-status contract)
      :headers (get-response-headers contract)
      :body (json/write-str (create-json-property
-                             (get-in contract [:response :schema])
-                             req))}))
+                             (get-in contract [:response :schema])))}))
