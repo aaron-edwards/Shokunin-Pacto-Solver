@@ -4,7 +4,8 @@
                  [compojure "1.4.0"]
                  [ring/ring-jetty-adapter "1.4.0"]
                  [http-kit "2.1.18"]
-                 [org.clojure/data.json "0.2.6"]]
+                 [org.clojure/data.json "0.2.6"]
+                 [helpshift/faker "0.2.0"]]
   :min-lein-version "2.0.0"
   :uberjar-name "clj-pacto-solver.jar"
   :main clj-pacto-solver.web

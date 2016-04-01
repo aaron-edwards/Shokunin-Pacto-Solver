@@ -35,3 +35,13 @@
   (let [contract {:response {:status 201}}]
     (is (= 201 (parser/get-response-status contract)))))
 
+
+(deftest create-json-property-should-return-a-string
+  (let [property {:type "string"}]
+    (is (string? (parser/create-json-property property nil)))))
+
+(deftest create-josn-property-should-return-valid-string
+  (let [property {:type "string"
+                  :pattern "^(READY|MAKING|QUEUED|DELAYED)$"}]
+   (is (re-matches (re-pattern (:pattern property))
+                  (parser/create-json-property property nil)))))
