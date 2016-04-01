@@ -29,7 +29,6 @@
 
 (defmulti create-json-property
   (fn [property req]
-    (println (str "dispatch: "property))
     (keyword (:type property))))
 
 (defmethod create-json-property :string [property req]
@@ -60,12 +59,6 @@
   (rand-int 10))
 
 (defn create-handler [contract]
-  (println {:status (get-response-status contract)
-            :headers (get-response-headers contract)
-            :schema (get-in contract [:response :schema])
-            :body (create-json-property
-                    (get-in contract [:response :schema])
-                    nil)})
   (fn [req]
     {:status (get-response-status contract)
      :headers (get-response-headers contract)
